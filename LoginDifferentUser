@@ -1,0 +1,46 @@
+// POST: Account/Login
+        [HttpPost]
+        public ActionResult Login(string username, string password)
+        {
+            // Check username and password validity
+            if (IsValid(username, password))
+            {
+                // Invalidate existing session if any
+                InvalidateSession(username);
+                
+                // Create new session for the current user
+                Session["username"] = username;
+                
+                // Redirect to the dashboard or home page
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                // Invalid credentials, return to login page with error message
+                ViewBag.ErrorMessage = "Invalid username or password.";
+                return View("Login");
+            }
+        }
+
+        // Method to invalidate existing session
+        private void InvalidateSession(string username)
+        {
+            // Loop through all active sessions
+            foreach (var key in Session.Keys)
+            {
+                // Check if session belongs to the same user
+                if (key.ToString() == "username" && Session[key].ToString() == username)
+                {
+                    // Abandon the session
+                    Session.Abandon();
+                    break;
+                }
+            }
+        }
+
+        // Method to validate username and password (You need to implement your own logic here)
+        private bool IsValid(string username, string password)
+        {
+            // Your validation logic goes here
+            // Return true if username and password are valid, otherwise false
+        }
