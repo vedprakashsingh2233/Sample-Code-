@@ -1,0 +1,139 @@
+function ShowTableData(Status) {
+    $.ajax({
+        type: "Post",
+        url: "/Dashboard/GetTicketsDetais",
+        data: "{Status:" + JSON.stringify(Status) + "}",
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        success: function (data) {
+            var jsonData = JSON.parse(data);
+            $('#tblitemDetail').DataTable().destroy()
+            $('#tblitemDetail').DataTable({
+                data: jsonData,
+                columns: [
+                    { data: "TicketNo", title: "TicketNo" },
+                    { data: "Title", title: "Title" },
+                    { data: "CreatedDate", title: "Created Date" },
+                    { data: "Priority", title: "Priority" },
+                    { data: "AssignTO", title: "Assign To" },
+                 /*   { data: "Status", title: "Status" },*/
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return '<img src = "../SiteAssets/img/' + row.StatusColor +'.png" height="20px" /> ';
+                        },
+                        title: "Status"
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            if (row.UserType == 'Client') {
+                                if (row.Status == 'Close' && row.Feedback =='Feedback') {
+                                    return '<input type="button" class="btn btn-outline-warning" value="View" data-bs-toggle="offcanvas" data-bs-target="#dvstatus" id="btnedit" onclick="getStages(\'' + row.TicketNo + '\')" />&nbsp' +
+                                         '<input type="button" class="btn btn-success" value="FeedBack" disabled   data-bs-toggle="offcanvas" data-bs-target="#dvFeedBack" id="btnedit2" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-outline-warning" value="Reopen"  id="btnedit3" onclick="ReopenTicket(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-outline-warning" value="Escalate"  data-bs-toggle="offcanvas" data-bs-target="#dvEscalate"  id="btnedit4" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp';
+                                }
+                                else if (row.Status == 'Close' && row.Feedback != 'Feedback') {
+                                    return '<input type="button" class="btn btn-outline-warning" value="View" data-bs-toggle="offcanvas" data-bs-target="#dvstatus" id="btnedit" onclick="getStages(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-success" value="FeedBack"    data-bs-toggle="offcanvas" data-bs-target="#dvFeedBack" id="btnedit2" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-outline-warning" value="Reopen"  id="btnedit3" onclick="ReopenTicket(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-outline-warning" value="Escalate"  data-bs-toggle="offcanvas" data-bs-target="#dvEscalate"  id="btnedit4" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp';
+                                }
+                                else {
+                                    return '<input type="button" class="btn btn-outline-warning" value="View" data-bs-toggle="offcanvas" data-bs-target="#dvstatus" id="btnedit" onclick="getStages(\'' + row.TicketNo + '\')" />&nbsp';
+                                        //'<input type="button" class="btn btn-success" value="FeedBack"  data-bs-toggle="offcanvas" data-bs-target="#dvFeedBack" id="btnedit2" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        //'<input type="button" class="btn btn-outline-warning" value="Reopen"  id="btnedit3" onclick="ShowTableData(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        //'<input type="button" class="btn btn-outline-warning" value="Escalate"  id="btnedit4" onclick="ShowTableData(\'' + row.TicketNo + '\')" />&nbsp';
+                                }
+                            }
+                            else if (row.UserType == 'Employee') {
+                                var demo = '<input type="button" class="btn btn-outline-warning" value="View" data-bs-toggle="offcanvas" data-bs-target="#dvstatus" id="btnedit" onclick="getStages(\'' + row.TicketNo + '\')" />&nbsp';
+                                if (row.Status == 'Onhold' || row.Status == 'complete' || row.Status == 'InProgress') {
+                                    demo += '<input type="button" class="btn btn-success" value="Action"  data-bs-toggle="offcanvas" data-bs-target="#dvAction" id="btnedit2" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp';
+                                }
+                                return demo;
+                                //return '<input type="button" class="btn btn-outline-warning" value="View" data-bs-toggle="offcanvas" data-bs-target="#dvstatus" id="btnedit" onclick="getStages(\'' + row.TicketNo + '\')" />&nbsp' +
+                                //    '<input type="button" class="btn btn-success" value="Action"  data-bs-toggle="offcanvas" data-bs-target="#dvAction" id="btnedit2" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp';
+                            }
+                            else {
+                                if (row.Status == 'Open' || row.Status =='Reopen') {
+                                    return '<input type="button" class="btn btn-outline-warning" value="View" data-bs-toggle="offcanvas" data-bs-target="#dvstatus" id="btnedit" onclick="getStages(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-outline-warning" value="Assing Ticket"  data-bs-toggle="offcanvas" data-bs-target="#dvAssignee"  id="btnedit4" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-success" value="Action"  data-bs-toggle="offcanvas" data-bs-target="#dvAction" id="btnedit2" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp';
+                                } else {
+                                    return '<input type="button" class="btn btn-outline-warning" value="View" data-bs-toggle="offcanvas" data-bs-target="#dvstatus" id="btnedit" onclick="getStages(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-outline-warning" value="Ticket Assigned" disabled  data-bs-toggle="offcanvas" data-bs-target="#dvAssignee"  id="btnedit4" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp' +
+                                        '<input type="button" class="btn btn-success" value="Action"  data-bs-toggle="offcanvas" data-bs-target="#dvAction" id="btnedit2" onclick="openFeedBack(\'' + row.TicketNo + '\')" />&nbsp';
+                                }
+                            }
+                        },
+                        title: "Action"
+                    },
+                ]
+            });
+        }
+    })
+}
+function SaveData() {
+    var FileData = [];
+
+    var files = $('#txtfiles')[0].files;
+    if (files.length > 0) {
+        var filesArray = Array.from(files);
+        filesArray.forEach(function (file) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.onload = function () {
+                FileData.push({ fileData: reader.result, FName: file.name });
+
+                if (FileData.length === filesArray.length) {
+                    SaveRecords(FileData);
+                }
+            };
+        });
+    }
+    else {
+        SaveRecords(FileData);
+    }
+}
+function SaveRecords(FileData) {
+    if ($('#txtProblem').val() == '') {
+        alert('Please enter problem !!');
+        $('#txtProblem').focus();
+    }
+    else if ($('#ddlProblemRelTo option:selected').val() == '') {
+        alert('Please select problem related to !!');
+        $('#ddlProblemRelTo').focus();
+    }
+    else if ($('#ddlPriority option:selected').val() == '') {
+        alert('Please select priority of problem !!');
+        $('#ddlPriority').focus();
+    }
+    else {
+        var obj = {
+            ClientCode: $('#lblclientCode').text(),
+            ProblemName: $('#txtProblem').val(),
+            ProblemRelatedTo: $('#ddlProblemRelTo option:selected').val(),
+            Priority: $('#ddlPriority option:selected').val(),
+            ProblemDetails: CKEDITOR.instances.txtPDetails.getData(),
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Dashboard/SaveTicketInquiery",
+            data: "{FormData:" + JSON.stringify(obj) + ",FileData:" + JSON.stringify(FileData) + "}",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                alert('Data Saved Successfully');
+                ShowTableData("");
+                CLearForm();
+            },
+            error: function () {
+                alert('Something went wrong');
+            },
+        });
+
+    }
+}
