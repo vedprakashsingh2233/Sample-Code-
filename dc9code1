@@ -1,0 +1,261 @@
+ #region Plan Mater
+        public ActionResult PlanMaster()
+        {
+            if (Session["UserId"] == null)
+            {
+                return Redirect("~/Admin/Login");
+            }
+            else
+            {
+                return View();
+            }
+        }
+        public JsonResult InsertUpdatePlanMaster(int Id, string PlanName,string Price, string IsActive)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic["Result"] = "";
+            string Action = "";
+            if (Id != 0)
+            {
+                Action = "Update";
+            }
+            else
+            {
+                Action = "Insert";
+            }
+            try
+            {
+                string[,] Param = new string[,]
+                {
+                    {"@Action",Action },
+                    {"@Id",Id.ToString().Trim() },
+                    {"@PlanName",PlanName.ToString().Trim() },
+                    {"@Price",Price.Trim() },
+                    {"@PlanType",IsActive.Trim() },
+                    {"@Ram",IsActive.Trim() },
+                    {"@vCPU",IsActive.Trim() },
+                    {"@SSD",IsActive.Trim() },
+                    {"@HDD",IsActive.Trim() },
+                    {"@Memory",IsActive.Trim() },
+                    {"@Bandwidth",IsActive.Trim() },
+                    {"@Sub_Cat_Id_Fk",IsActive.Trim() },
+                    {"@IsActive",IsActive.Trim() },                
+                    {"@DedicatedIP",IsActive.Trim() },                
+                    {"@OSChoice",IsActive.Trim() },                
+                    {"@Remark",IsActive.Trim() },                
+                    {"@ServerLocation",IsActive.Trim() },                
+                    {"@NVMe",IsActive.Trim() },                
+                    {"@Bonus",IsActive.Trim() },                
+                    {"@Migration",IsActive.Trim() },                
+                    {"@SSL",IsActive.Trim() },                
+                    {"@Security",IsActive.Trim() },                
+                    {"@Monitoring",IsActive.Trim() },                
+                    {"@Prevention",IsActive.Trim() },                
+                    {"@Service_Support",IsActive.Trim() },                
+                    {"@Support",IsActive.Trim() },                
+                    {"@Guarantee",IsActive.Trim() },                
+                };
+                DataTable dt = CommonMethod.ExecuteProc("USP_InsertUpdateDelCategoryMaster", Param);
+                if (dt.Rows.Count > 0)
+                {
+                    dic["Result"] = dt.Rows[0]["Message"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                dic["Result"] = ex.Message;
+            }
+            return Json(dic);
+        }
+        public JsonResult ShowPlanList()
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic["Result"] = "";
+            try
+            {
+                string[,] Param = new string[,]
+                {
+                    {"@Action","Select" },
+                };
+                DataTable dt = CommonMethod.ExecuteProc("USP_InsertUpdateDelCategoryMaster", Param);
+                if (dt.Rows.Count > 0)
+                {
+                    dic["Data"] = JsonConvert.SerializeObject(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                dic["Result"] = ex.Message;
+            }
+            return Json(dic);
+        }
+        public JsonResult EditPlan(string Id)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic["Result"] = "";
+            try
+            {
+                string[,] Param = new string[,]
+                {
+                    {"@Action","Edit" },
+                    {"@Id",Id},
+                };
+                DataTable dt = CommonMethod.ExecuteProc("USP_InsertUpdateDelCategoryMaster", Param);
+                if (dt.Rows.Count > 0)
+                {
+                    dic["Record"] = JsonConvert.SerializeObject(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                dic["Result"] = ex.Message;
+            }
+            return Json(dic);
+        }
+        public JsonResult DeletePlan(string Id)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic["Result"] = "";
+            try
+            {
+                string[,] Param = new string[,]
+                {
+                    {"@Action","Delete" },
+                    {"@Id",Id},
+                };
+                DataTable dt = CommonMethod.ExecuteProc("USP_InsertUpdateDelCategoryMaster", Param);
+                if (dt.Rows.Count > 0)
+                {
+                    dic["Result"] = dt.Rows[0]["Message"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                dic["Result"] = ex.Message;
+            }
+            return Json(dic);
+        }
+        #endregion Plan Master
+
+
+
+
+create  table PlanMaster 
+(
+[Id] [int] IDENTITY(1,1) NOT NULL,
+[PlanName] [varchar](100) NULL,
+[Price] [decimal](18, 3) NULL,
+[PlanType] [varchar](100) NULL,
+[Ram] [varchar](20) NULL,
+[vCPU] [varchar](20) NULL,
+[SSD] [varchar](20) NULL,
+[HDD] [varchar](20) NULL,
+[Memory] [varchar](100) NULL,
+[Bandwidth] [varchar](20) NULL,
+[Sub_Cat_Id_Fk] [int] NULL,
+[IsActive] [bit] NULL,
+DedicatedIP varchar(20),
+OSChoice varchar(100),
+Remark varchar(300),
+ServerLocation varchar(100),
+NVMe varchar(100),
+Bonus varchar(100),
+Migration varchar(100),
+SSL varchar(100),
+Security varchar(100),
+Monitoring varchar(200),
+Prevention varchar(200),
+Service_Support varchar(200),
+Support varchar(100),
+Guarantee varchar(200)
+)
+
+go
+Create proc [dbo].[USP_InsertUpdateDelPlanMaster]
+@Id Int=0,
+@PlanName [varchar](100)= NULL,
+@Price [decimal](18, 3)= NULL,
+@PlanType [varchar](100)= NULL,
+@Ram [varchar](20)= NULL,
+@vCPU [varchar](20)= NULL,
+@SSD [varchar](20)= NULL,
+@HDD [varchar](20)= NULL,
+@Memory [varchar](100) =NULL,
+@Bandwidth [varchar](20) =NULL,
+@Sub_Cat_Id_Fk [int] =NULL,
+@IsActive [bit]= NULL,
+@DedicatedIP varchar(20)=Null,
+@OSChoice varchar(100)=Null,
+@Remark varchar(300)=Null,
+@ServerLocation varchar(100)=Null,
+@NVMe varchar(100)=Null,
+@Bonus varchar(100)=Null,
+@Migration varchar(100)=Null,
+@SSL varchar(100)=Null,
+@Security varchar(100)=Null,
+@Monitoring varchar(200)=Null,
+@Prevention varchar(200)=Null,
+@Service_Support varchar(200)=Null,
+@Support varchar(100)=Null,
+@Guarantee varchar(200)=Null,
+@Action varchar(20)
+
+As 
+Declare @msg varchar(100)
+Begin
+	 If(@Action='Insert')
+		 Begin
+		 if Exists(select 1 from PlanMaster where PlanName=@PlanName )
+		 Begin
+			set @msg='Record Already Exist ..'
+			select @msg as Message
+		 End
+		 Else
+			Begin
+
+				Insert Into PlanMaster(PlanName,Price,PlanType,Ram,vCPU,SSD,HDD,Memory,Bandwidth,Sub_Cat_Id_Fk,DedicatedIP,OSChoice,
+				Remark,ServerLocation,NVMe,Bonus,Migration,SSL,Security,Monitoring,Prevention,Service_Support,Support,Guarantee,IsActive)values
+			   (@PlanName,@Price,@PlanType,@Ram,@vCPU,@SSD,@HDD,@Memory,@Bandwidth,@Sub_Cat_Id_Fk,@DedicatedIP,@OSChoice,@Remark,
+				@ServerLocation,@NVMe,@Bonus,@Migration,@SSL,@Security,@Monitoring,@Prevention,@Service_Support,@Support,@Guarantee,@IsActive)
+				set @msg='Record Inserted Successfully'
+				select @msg as Message
+			End
+		 End
+	 Else  If(@Action='Update')
+		 Begin
+			 if Exists(select 1 from PlanMaster where PlanName=@PlanName and  Id!=@Id)
+			 Begin
+				set @msg='Record Already Exist ..'
+				select @msg as Message
+			 End
+			 Else
+				 Begin
+					Update PlanMaster set PlanName=@PlanName,Price=@Price,PlanType=@PlanType,Ram=@Ram,vCPU=@vCPU,SSD=@SSD,HDD=@HDD,Memory=@Memory,
+					Bandwidth=@Bandwidth,Sub_Cat_Id_Fk=@Sub_Cat_Id_Fk,DedicatedIP=@DedicatedIP,OSChoice=@OSChoice,Remark=@Remark,ServerLocation=@ServerLocation,
+					NVMe=@NVMe,Bonus=@Bonus,Migration=@Migration,SSL=@SSL,Security=@Security,Monitoring=@Monitoring,Prevention=@Prevention,
+					Service_Support=@Service_Support,Support=@Support,Guarantee=@Guarantee,IsActive=@IsActive where Id=@Id
+					set @msg='Record Updated Successfully'
+					select @msg as Message
+				End
+		 End
+	 Else  If(@Action='Select')
+		 Begin
+			Select PM.Id,PM.PlanName,PM.Price,PM.Bandwidth, SM.SubCategoryName from PlanMaster PM
+			left join SubCategoryMaster SM on PM.Sub_Cat_Id_Fk =SM.Id
+		 End
+	  Else  If(@Action='Edit')
+		 Begin
+			Select * from SubCategoryMaster where Id=@Id
+		 End
+	 Else  If(@Action='Delete')
+		 Begin
+			Delete From PlanMaster where Id=@Id
+			set @msg='Record Deleted Successfully'
+			select @msg as Message
+		 End
+	
+End
