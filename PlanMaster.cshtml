@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "PlanMaster";
+    Layout = "~/Views/Shared/_Admin_LayOut.cshtml";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<h2>PlanMaster</h2>
+
+<div class="container row">
+    <div class="col-sm-4">
+        <input type="hidden" id="hdId" value="0" />
+        <label>Sub Category</label>
+        <select class="form-control" id="ddlSubCategory">
+        </select>
+    </div>
+    <div class="col-sm-4">
+        <label>Plan Name</label>
+        <input type="text" id="txtPlanName" placeholder="Please Enter Sub Category Name" class="form-control" />
+    </div>
+
+    <div class="col-sm-4">
+        <label>Price</label>
+        <input type="text" id="txtPrice" placeholder="Please Enter Heading 1" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Remark</label>
+        <input type="text" id="txtRemark" placeholder="Please Enter Heading 1" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Plan Type</label>
+        <input type="text" id="txtPlanType" placeholder="Please Enter Heading 2" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Ram</label>
+        <input type="text" id="txtRam" placeholder="Please Enter Heading 3" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>vCPU</label>
+        <input type="text" id="txtvCPU" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>SSD</label>
+        <input type="text" id="txtSSD" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>HDD</label>
+        <input type="text" id="txtHDD" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Memory</label>
+        <input type="text" id="txtMemory" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Bandwidth</label>
+        <input type="text" id="txtBandwidth" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>DedicatedIP</label>
+        <input type="text" id="txtDedicatedIP" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>OS Choice</label>
+        <input type="text" id="txtOSChoice" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Server Location</label>
+        <input type="text" id="txtServerLocation" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>NVMe</label>
+        <input type="text" id="txtNVMe" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Bonus</label>
+        <input type="text" id="txtBonus" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Migration</label>
+        <input type="text" id="txtMigration" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>SSL</label>
+        <input type="text" id="txtSSL" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Security</label>
+        <input type="text" id="txtSecurity" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Monitoring</label>
+        <input type="text" id="txtMonitoring" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Prevention</label>
+        <input type="text" id="txtPrevention" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Service Support</label>
+        <input type="text" id="txtService_Support" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Support</label>
+        <input type="text" id="txtSupport" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4">
+        <label>Guarantee</label>
+        <input type="text" id="txtGuarantee" placeholder="Please Enter Heading 4" class="form-control" />
+    </div>
+    <div class="col-sm-4 mt-4">
+        <label>IsActive</label>
+        <input type="checkbox" id="chkIsActive" checked class="form-check-input" />
+    </div>
+    <div class="col-sm-6 p-2">
+        <button id="btnSave" class="btn btn-primary" onclick="InsertUpdate()">Save</button>
+    </div>
+</div>
+<div class="card-body">
+
+    <div class="table-responsive">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered" id="tblBookList">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Plan Name</th>
+                            <th>Price</th>
+                            <th>Bandwidth</th>
+                            <th>SubCategory Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/Scripts/PlanMaster.js"></script>
